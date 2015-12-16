@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial scale=1">
+		<title>third eye | inspiration</title>
+		<link rel="stylesheet" href="css/style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="js/script.js"></script>
+
+	</head>
+	
+
+	<body>
+		<div class="container">
+		<div id="header"><a href="index.html"><img class="banner" src="img/thirdeyelogo.png"></a></div>
+
+        <ul id="inspiration"></ul>
+        
+        <a class="home-btn-inspiration" href="index.html">Back Home</a>
+
+    </div>
+			
+	<script>
+	$(document).ready(function(){
+	// pass in an object that setup the ajax call and handle the success/error responses
+	console.log("start");
+	$.ajax({
+	    url: "https://api.instagram.com/v1/tags/meditation/media/recent?access_token=2339943.1fb234f.44384f3946ff44cb83a3068374578484",
+	    type: "GET",
+	    crossDomain: true,    // used to prevent cross domain issues
+	    dataType: 'jsonp',    // used to prevent cross domain issues
+	    success: function(response) {     
+	        // The request succeeded
+	        console.log("success");
+	        //console.log(response1);
+	        console.log("another log");
+	       	parseInstagramData(response);
+	    },
+	    error: function(xhr, status) {
+	    	// The request failed
+	    	console.log("fail");
+	        console.log(status);
+	    }
+	});
+	console.log("end");
+	function parseInstagramData(json){
+		// iterate over each object and create a list of every photo and user
+        $.each(json.data, function(key,val){
+        	console.log(val);
+        	var photo = val.images.standard_resolution.url;
+        	var user  = val.user.profile_picture;
+        	var username = val.user.username;
+        	$('<img/>').attr('src',photo).on('load', function(){
+        		// update the photo
+        		$('#'+val.id).html(this);
+        	});
+
+			$('<li id="'+val.id+'" style="width:640;height:640"><img src="wait.gif"/></li>').appendTo('#inspiration');
+        	//$('<li><img src="'+photo+'"/><img src="'+user+'"/>'+username+'</li>').appendTo('#cats');
+        });
+	}
+});
+
+
+	</script>		
+	</body>
+
+</html>
